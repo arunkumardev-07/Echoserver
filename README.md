@@ -20,52 +20,52 @@ Implementation using Python code
 Testing the server and client 
 
 ## PROGRAM:
-## echo-server.py
+### NAME: Arunkumar.P
+### REG NO: 212222040016
+### CLIENT :
 ```
 import socket
-
-
-HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
-PORT = 65432  # Port to listen on (non-privileged ports are > 1023)
-
-
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    s.bind((HOST, PORT))
-    s.listen()
-    conn, addr = s.accept()
-    with conn:
-        print(f"Connected by {addr}")
-        while True:
-            data = conn.recv(1024)
-            if not data:
-                break
-            conn.sendall(data)
+s = socket.socket()
+s.connect(('localhost', 8000))
+while True:
+    msg = input("client > ")
+    s.send(msg.encode())
+    if msg == 'exit': 
+        print("Closing connection...")
+        break
+    print("server > ", s.recv(1024).decode()) 
+s.close()
+print("Client closed.")
 ```
-## echo-client.py
-
+### SERVER :
 ```
 import socket
-
-
-HOST = "127.0.0.1"  # The server's hostname or IP address
-PORT = 65432  # The port used by the server
-
-
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    s.connect((HOST, PORT))
-    s.sendall(b"Hello, world")
-    data = s.recv(1024)
-
-
-print(f"Received {data!r}")
+s = socket.socket()
+s.bind(('localhost', 8000))
+s.listen(5)
+print("Server is listening...")
+c, addr = s.accept()
+print(f"Connection from {addr} has been established.")
+while True:
+    s_msg = c.recv(1024).decode()
+    if s_msg == 'exit':
+        print("Client requested to close the connection.")
+        break
+    print("client > ", s_msg)
+    c.send(s_msg.encode())
+c.close()
+s.close()
+print("Server closed.")
 ```
 
-## OUTPUT:
-## echo-server
-![scoft1](https://github.com/Praveenkumar2004-dev/Echoserver/assets/119559827/4c7eb255-2ba6-4873-bd10-540c7dd110d4)
+## CLIENT OUTPUT:
+![client out](https://github.com/user-attachments/assets/4d95043c-8591-4ce2-b11f-1f558320562e)
 
-## echo-client.py
-![scoft2](https://github.com/Praveenkumar2004-dev/Echoserver/assets/119559827/30a27072-87d0-4473-b0dd-8c30161743a1)
+
+## SERVER OUTPUT:
+![server out](https://github.com/user-attachments/assets/26cfe822-4ba4-4b2b-b9ba-649a4aa2930d)
+
+
 
 
 ## RESULT:
